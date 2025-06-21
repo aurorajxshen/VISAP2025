@@ -1,0 +1,251 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #181c2b;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  #network-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    opacity: 0.25;
+    filter: blur(4px) brightness(0.7);
+    pointer-events: none;
+  }
+  
+  #reminiscence-mask {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    pointer-events: none;
+    /* Use a radial gradient for a memory "cloud" effect */
+    background: radial-gradient(ellipse at 60% 40%, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 70%, transparent 100%);
+    /* If you have a PNG/SVG mask, use:
+    mask-image: url('your-mask.png');
+    mask-size: cover;
+    */
+  }
+  
+  #text-layer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    pointer-events: none;
+  }
+  
+  /* Aurora background blobs */
+  .aurora-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+    mix-blend-mode: lighten;
+    animation: auroraMove 18s ease-in-out infinite alternate;
+  }
+  .aurora-blob:nth-child(1) {
+    width: 40vw; height: 40vw; left: 10vw; top: 10vh;
+    background: linear-gradient(120deg, #7fffd4, #00bfff 60%, #ff00cc);
+    animation-delay: 0s;
+  }
+  .aurora-blob:nth-child(2) {
+    width: 30vw; height: 30vw; right: 5vw; top: 30vh;
+    background: linear-gradient(60deg, #ffb347, #ffccff 60%, #00ffea);
+    animation-delay: 4s;
+  }
+  .aurora-blob:nth-child(3) {
+    width: 35vw; height: 35vw; left: 30vw; bottom: 0;
+    background: linear-gradient(200deg, #ff6f91, #ffc300 60%, #6a89cc);
+    animation-delay: 8s;
+  }
+  @keyframes auroraMove {
+    0% { transform: scale(1) translateY(0) rotate(0deg);}
+    100% { transform: scale(1.2) translateY(-40px) rotate(30deg);}
+  }
+  
+  #gooey-marquee {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    max-width: 900px;
+    height: 3.2rem;
+    overflow: hidden;
+    z-index: 10;
+    filter: blur(0.5px) contrast(2.5);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: none;
+  }
+  #gooey-marquee.float {
+    transition: none;
+    transform: translate(-50%, -50%);
+  }
+  #gooey-marquee::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 8vw;
+    height: 100%;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, #b2f7ff 0%, #00eaff 20%, transparent 60%);
+    filter: blur(18px) brightness(1.1);
+    opacity: 0.32;
+    z-index: 2;
+    pointer-events: none;
+  }
+  #typewriter-text {
+    position: static;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background: linear-gradient(90deg, #b2f7ff 0%, #00eaff 40%, #6a89cc 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px #00eaff88);
+    text-align: center;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typewriter 2.8s steps(30, end) 0.2s 1 normal both;
+    z-index: 3;
+  }
+  #typewriter-text::after {
+    content: none;
+  }
+  .comet-tail {
+    display: inline-block;
+    height: 1.1em;
+    margin-left: 0.45em;
+    vertical-align: -0.1em;
+    border-radius: 1em 2.5em 2.5em 1em / 1em 2.5em 2.5em 1em;
+    background: linear-gradient(90deg, #b2f7ff 0%, #00eaff 60%, #6a89cc 100%);
+    box-shadow: 0 0 18px 8px #b2f7ff44, 0 0 32px 16px #00eaff22;
+    filter: blur(2.5px) brightness(0.95);
+    opacity: 0.38;
+    transition: width 0.2s, opacity 0.2s, margin-left 0.2s;
+  }
+  @keyframes typewriter {
+    from { max-width: 0; }
+    to { max-width: 100vw; }
+  }
+  @keyframes memory-tail {
+    0% { opacity: 0; transform: scaleX(0.5) scaleY(0.7); }
+    60% { opacity: 1; transform: scaleX(1.1) scaleY(1.1); }
+    100% { opacity: 0.7; transform: scaleX(1.3) scaleY(1.2); }
+  }
+  #gooey-marquee.drift #typewriter-text::after {
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(.7,0,.3,1);
+  }
+  
+  .tw-letter {
+    display: inline;
+    background: inherit;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px #00eaff88);
+  }
+  
+  @keyframes tw-wave {
+    0% { transform: translateY(0) scaleY(1); }
+    20% { transform: translateY(-8px) scaleY(1.1); }
+    40% { transform: translateY(0) scaleY(1); }
+    60% { transform: translateY(8px) scaleY(0.9); }
+    100% { transform: translateY(0) scaleY(1); }
+  }
+  
+  @keyframes tw-shimmer {
+    0% { filter: brightness(1) drop-shadow(0 2px 8px #00eaff88); }
+    50% { filter: brightness(2) drop-shadow(0 2px 16px #ff00cc88); }
+    100% { filter: brightness(1) drop-shadow(0 2px 8px #00eaff88); }
+  }
+  
+  #dissolve-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    background: transparent;
+    z-index: 5;
+  }
+  
+  #circle-svg {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    pointer-events: none;
+    width: 600px;
+    height: 600px;
+    display: none;
+  }
+  
+  .letter {
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-size: 2.2rem;
+    font-variation-settings: "wght" 700, "wdth" 100;
+    fill: url(#text-gradient);
+    filter: drop-shadow(0 2px 8px #00eaff88);
+    transition: font-variation-settings 0.3s;
+  }
+  
+  #marquee {
+    position: absolute;
+    bottom: 10vh;
+    left: 0;
+    width: 100vw;
+    text-align: center;
+    font-size: 2.2rem;
+    font-family: 'Inter', 'Arial', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    z-index: 5;
+    pointer-events: none;
+    display: none;
+    filter: drop-shadow(0 2px 8px #00eaff88);
+  }
+  
+  .marquee-text {
+    display: inline-block;
+    padding-left: 100vw;
+    animation: marquee 12s linear infinite;
+    background: linear-gradient(90deg, #fff 0%, #00eaff 40%, #ff00cc 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter: blur(0.5px);
+  }
+  
+  @keyframes marquee {
+    0% { left: 0; }
+    100% { left: -40vw; }
+  }
